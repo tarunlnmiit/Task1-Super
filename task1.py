@@ -1,19 +1,25 @@
 from PIL import Image, ImageDraw
 
-im = Image.open('img/office.jpg')
+im = Image.open('office.jpg')
+
+var = int(input('Enter Variable Pixel Size: '))
+
+draw = ImageDraw.Draw(im)
 m,n = im.size
 
-# draw = ImageDraw.Draw(im)
-# p_x, p_y = map(int, input().strip().split())
-# for i in range(0, m, p_x):
-# 	for j in range(0, n, p_y):
-# 		draw.line((i,j,i,j+p_y), fill=0)
-# 		draw.line((i,j,i+p_x,j), fill=0)
-# im.show()
-for i in range(m):
-	for j in range(n):
-		r, g, b = im.getpixel((i, j))
-		x = int((0.299*r) + (0.587*g) + (0.114*b))
-		im.putpixel((i, j), (x,x,x))
+for i in range(0,m,var):
+	for j in range(0,n,var):
+		box = (i,j,i+var,j+var)
+		region = im.crop(box)
+		region = region.convert('L')
+		pixels = list(region.getdata())
+		avg = sum(pixels) // len(pixels)
+		region.putdata([avg]*len(pixels))
+		im.paste(region,box)
+		
+for i in range(0,m,var):
+	for j in range(0,n,var):
+		draw.line((i,j,i+var,j), fill=0, width=1)
+		draw.line((i,j,i,j+var), fill=0, width=1)
 
 im.show()
