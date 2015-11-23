@@ -22,4 +22,4 @@ for i in range(0,m,var):
 		draw.line((i,j,i+var,j), fill=0, width=1)
 		draw.line((i,j,i,j+var), fill=0, width=1)
 
-im.show()
+im.save('grayscaled_'+str(var)+'.jpg')
